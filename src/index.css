@@ -1,0 +1,132 @@
+:root {
+  --azul-institucional: #003399;
+  --azul-institucional-hover: #002266;
+  --azul-institucional-light: rgba(0, 51, 153, 0.08);
+  --azul-institucional-glow: rgba(0, 51, 153, 0.2);
+
+  --bg-pagina: #f8fafc;
+  --bg-card: #ffffff;
+  --texto-principal: #0f172a;
+  --texto-secundario: #475569;
+  --texto-mutado: #94a3b8;
+  --borde-color: #e2e8f0;
+
+  --fuente-principal: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --fuente-titulo: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--fuente-principal);
+  background-color: var(--bg-pagina);
+  color: var(--texto-principal);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Institutional Header Banner */
+.header-institucional {
+  background: var(--azul-institucional);
+  color: #ffffff;
+  padding: 16px 24px;
+  box-shadow: 0 4px 14px rgba(0, 51, 153, 0.15);
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Page Title Section */
+.hero-respuestas {
+  background: #ffffff;
+  border-bottom: 1px solid var(--borde-color);
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.hero-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.titulo-respuestas {
+  font-family: var(--fuente-titulo);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--azul-institucional);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.subtitulo-respuestas {
+  font-size: 1.1rem;
+  color: var(--texto-secundario);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* Responsive Grid for Tarjetas */
+.grid-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+/* Hover Effects on Tarjeta */
+.tarjeta-tramite {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tarjeta-tramite:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 51, 153, 0.14) !important;
+  border-color: var(--azul-institucional) !important;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 900px) {
+  .grid-tarjetas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 28px auto;
+    padding: 0 20px;
+  }
+  .titulo-respuestas {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .grid-tarjetas {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+  .hero-respuestas {
+    padding: 24px 16px;
+  }
+  .titulo-respuestas {
+    font-size: 1.75rem;
+  }
+  .subtitulo-respuestas {
+    font-size: 0.95rem;
+  }
+}
