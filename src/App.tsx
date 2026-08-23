@@ -1,12 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TarjetaTramite } from './components/TarjetaTramite';
 import { ConsultasPage } from './pages/ConsultasPage';
+import { DetalleConsultaPage } from './pages/DetalleConsultaPage';
 import { Droplets, Trash2, Lightbulb, Building2, Search, PhoneCall, HelpCircle, CheckCircle, FileSearch, Home } from 'lucide-react';
 
 export function App() {
   const [paginaActual, setPaginaActual] = useState<'inicio' | 'consultas'>('inicio');
+  const [radicadoSeleccionadoId, setRadicadoSeleccionadoId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTramite, setSelectedTramite] = useState<string | null>(null);
+
+  // Parsear URL inicial para rutas del tipo /consultas/1 o /consultas/RAD-2026-001
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path.startsWith('/consultas/')) {
+      const id = path.split('/consultas/')[1];
+      if (id) {
+        setRadicadoSeleccionadoId(id);
+        setPaginaActual('consultas');
+      }
+    }
+  }, []);
 
   const tramites = [
     {
@@ -37,6 +51,18 @@ export function App() {
     t.descripcion.toLowerCase().includes(searchQuery.toLowerCase()) ||
     t.categoria.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleSeleccionarRadicado = (id: string) => {
+    setRadicadoSeleccionadoId(id);
+    setPaginaActual('consultas');
+    window.history.pushState({}, '', `/consultas/${id}`);
+  };
+
+  const handleVolverAConsultas = () => {
+    setRadicadoSeleccionadoId(null);
+    setPaginaActual('consultas');
+    window.history.pushState({}, '', '/');
+  };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#f8fafc' }}>
@@ -72,7 +98,7 @@ export function App() {
           {/* Navigation Bar */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <button
-              onClick={() => setPaginaActual('inicio')}
+              onClick={() => { setRadicadoSeleccionadoId(null); setPaginaActual('inicio'); window.history.pushState({}, '', '/'); }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -80,8 +106,8 @@ export function App() {
                 padding: '8px 16px',
                 borderRadius: '8px',
                 border: 'none',
-                background: paginaActual === 'inicio' ? '#ffffff' : 'rgba(255,255,255,0.15)',
-                color: paginaActual === 'inicio' ? '#003399' : '#ffffff',
+                background: (paginaActual === 'inicio' && !radicadoSeleccionadoId) ? '#ffffff' : 'rgba(255,255,255,0.15)',
+                color: (paginaActual === 'inicio' && !radicadoSeleccionadoId) ? '#003399' : '#ffffff',
                 fontWeight: 700,
                 fontSize: '0.88rem',
                 cursor: 'pointer',
@@ -92,7 +118,7 @@ export function App() {
             </button>
 
             <button
-              onClick={() => setPaginaActual('consultas')}
+              onClick={() => { setRadicadoSeleccionadoId(null); setPaginaActual('consultas'); }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -100,8 +126,8 @@ export function App() {
                 padding: '8px 16px',
                 borderRadius: '8px',
                 border: 'none',
-                background: paginaActual === 'consultas' ? '#ffffff' : 'rgba(255,255,255,0.15)',
-                color: paginaActual === 'consultas' ? '#003399' : '#ffffff',
+                background: (paginaActual === 'consultas' || radicadoSeleccionadoId) ? '#ffffff' : 'rgba(255,255,255,0.15)',
+                color: (paginaActual === 'consultas' || radicadoSeleccionadoId) ? '#003399' : '#ffffff',
                 fontWeight: 700,
                 fontSize: '0.88rem',
                 cursor: 'pointer',
@@ -118,10 +144,17 @@ export function App() {
         </div>
       </header>
 
-      {/* Conditional Rendering Based on Active Navigation */}
-      {paginaActual === 'consultas' ? (
+      {/* Conditional Rendering Based on Active Page / Radicado Selection */}
+      {radicadoSeleccionadoId ? (
         <main style={{ flex: 1 }}>
-          <ConsultasPage />
+          <DetalleConsultaPage
+            radicadoId={radicadoSeleccionadoId}
+            onVolver={handleVolverAConsultas}
+          />
+        </main>
+      ) : paginaActual === 'consultas' ? (
+        <main style={{ flex: 1 }}>
+          <ConsultasPage onSeleccionarRadicado={handleSeleccionarRadicado} />
         </main>
       ) : (
         <>

@@ -12,7 +12,11 @@ export interface PqrsItem {
   respuestaOficial: string;
 }
 
-export const ConsultasPage: React.FC = () => {
+interface ConsultasPageProps {
+  onSeleccionarRadicado?: (id: string) => void;
+}
+
+export const ConsultasPage: React.FC<ConsultasPageProps> = ({ onSeleccionarRadicado }) => {
   const [datos, setDatos] = useState<PqrsItem[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -360,6 +364,25 @@ export const ConsultasPage: React.FC = () => {
                     </span>
                     <span>Plazo: <strong>{item.plazoLegal}</strong></span>
                   </div>
+
+                  <button
+                    onClick={() => onSeleccionarRadicado && onSeleccionarRadicado(item.id)}
+                    style={{
+                      width: '100%',
+                      marginTop: '14px',
+                      padding: '8px',
+                      background: 'rgba(0, 51, 153, 0.06)',
+                      color: '#003399',
+                      border: '1px solid rgba(0, 51, 153, 0.2)',
+                      borderRadius: '8px',
+                      fontWeight: 700,
+                      fontSize: '0.85rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    Ver Ficha Técnica Completa →
+                  </button>
                 </div>
               </article>
             );
