@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TarjetaTramite } from './components/TarjetaTramite';
 import { Droplets, Trash2, Lightbulb, Building2, Search, PhoneCall, HelpCircle, CheckCircle } from 'lucide-react';
 

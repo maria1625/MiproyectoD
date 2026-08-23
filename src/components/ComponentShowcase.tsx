@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sliders, Palette, Layers, Sparkles, Check, Heart, MessageSquare, Share2, Eye } from 'lucide-react';
+import { Sliders, Palette, Sparkles, Heart, MessageSquare, Share2, Eye } from 'lucide-react';
 
 export const ComponentShowcase: React.FC = () => {
   const [blurAmount, setBlurAmount] = useState(16);
@@ -96,7 +96,7 @@ export const ComponentShowcase: React.FC = () => {
           boxShadow: `0 0 25px ${accentColor}40`,
           display: 'flex',
           flexDirection: 'column',
-          justify: 'space-between',
+          justifyContent: 'space-between',
           transition: 'all 0.2s ease'
         }}>
           <div>

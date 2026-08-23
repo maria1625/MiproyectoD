@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ChevronRight, Tag } from 'lucide-react';
+import { ChevronRight, Tag } from 'lucide-react';
 
 export interface TarjetaTramiteProps {
   titulo: string;

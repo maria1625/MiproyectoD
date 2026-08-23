@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, RotateCcw, Terminal, ShieldCheck, Copy, Check } from 'lucide-react';
+import { Play, RotateCcw, Terminal, Copy, Check } from 'lucide-react';
 
 interface LogEntry {
   id: number;
