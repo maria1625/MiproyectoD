@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { TarjetaTramite } from './components/TarjetaTramite';
+import { TablaPqrs } from './components/TablaPqrs';
 import { Droplets, Trash2, Lightbulb, Building2, Search, PhoneCall, HelpCircle, CheckCircle } from 'lucide-react';
 
 export function App() {
@@ -178,6 +179,9 @@ export function App() {
             </div>
           </div>
         )}
+
+        {/* Tabla de Radicados PQRS desde el endpoint /api/pqrs */}
+        <TablaPqrs />
       </main>
 
       {/* Footer */}

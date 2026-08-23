@@ -1,0 +1,102 @@
+[
+  {
+    "id": "RAD-2026-001",
+    "solicitante": "Carlos Eduardo Mendoza",
+    "categoria": "Agua y Alcantarillado",
+    "descripcion": "Fuga de agua potable en vía pública frente al predio #45-12. Pérdida constante de presión en la cuadra.",
+    "estado": "En trámite",
+    "fechaRadicacion": "2026-08-18",
+    "plazoLegal": "5 días hábiles",
+    "respuestaOficial": "Técnicos de cuadrilla asignados. Inspección programada para el 24 de agosto de 2026."
+  },
+  {
+    "id": "RAD-2026-002",
+    "solicitante": "María Fernanda Gómez",
+    "categoria": "Recolección de Basura",
+    "descripcion": "Acumulación de residuos sólidos en esquina del parque principal por omisión en ruta del camión recolector.",
+    "estado": "Resuelto",
+    "fechaRadicacion": "2026-08-10",
+    "plazoLegal": "3 días hábiles",
+    "respuestaOficial": "Ruta especial de limpieza ejecutada el 12 de agosto de 2026. Zona despejada y sanitizada."
+  },
+  {
+    "id": "RAD-2026-003",
+    "solicitante": "Jorge Eliecer Rodríguez",
+    "categoria": "Alumbrado Público",
+    "descripcion": "Reporte de 3 lámparas LED apagadas en la Calle 50 con Carrera 14. Sector oscuro en horas nocturnas.",
+    "estado": "Resuelto",
+    "fechaRadicacion": "2026-08-05",
+    "plazoLegal": "8 días hábiles",
+    "respuestaOficial": "Sustitución de balastros y fotoceldas completada el 09 de agosto de 2026. Iluminación reestablecida."
+  },
+  {
+    "id": "RAD-2026-004",
+    "solicitante": "Claudia Patricia Torres",
+    "categoria": "Agua y Alcantarillado",
+    "descripcion": "Obstrucción y rebosamiento en pozo de alcantarillado en la Avenida Bolivariana durante lluvias.",
+    "estado": "En trámite",
+    "fechaRadicacion": "2026-08-20",
+    "plazoLegal": "5 días hábiles",
+    "respuestaOficial": "Programado camión vactor para succión y sondeo de red principal el 25 de agosto de 2026."
+  },
+  {
+    "id": "RAD-2026-005",
+    "solicitante": "Roberto Antonio Silva",
+    "categoria": "Recolección de Basura",
+    "descripcion": "Solicitud de instalación de contenedores adicionales de reciclaje y residuos orgánicos en barrio San José.",
+    "estado": "En trámite",
+    "fechaRadicacion": "2026-08-15",
+    "plazoLegal": "15 días hábiles",
+    "respuestaOficial": "Estudio técnico de factibilidad en evaluación por el equipo de gestión ambiental."
+  },
+  {
+    "id": "RAD-2026-006",
+    "solicitante": "Valeria Martínez Castro",
+    "categoria": "Alumbrado Público",
+    "descripcion": "Poste de alumbrado público inclinado a 45 grados por colisión vehicular con riesgo de caída.",
+    "estado": "Resuelto",
+    "fechaRadicacion": "2026-08-12",
+    "plazoLegal": "2 días hábiles",
+    "respuestaOficial": "Atención prioritaria de emergencia. ESTRUCTURA REEMPLAZADA Y ASEGURADA EL 13 de agosto."
+  },
+  {
+    "id": "RAD-2026-007",
+    "solicitante": "Gustavo Adolfo Morales",
+    "categoria": "Agua y Alcantarillado",
+    "descripcion": "Suspensión imprevista del servicio de agua sin aviso previo en la Urbanización El Roble.",
+    "estado": "Resuelto",
+    "fechaRadicacion": "2026-08-08",
+    "plazoLegal": "1 día hábil",
+    "respuestaOficial": "Cierre preventivo por reparación de válvula de 12 pulgadas. Servicio restablecido a las 18:00 hrs."
+  },
+  {
+    "id": "RAD-2026-008",
+    "solicitante": "Diana Marcela Pérez",
+    "categoria": "Recolección de Basura",
+    "descripcion": "Incumplimiento de horarios habituales de recolección nocturna en la Zona Comercial Centro.",
+    "estado": "En trámite",
+    "fechaRadicacion": "2026-08-21",
+    "plazoLegal": "3 días hábiles",
+    "respuestaOficial": "Revisión de bitácoras de flota de camiones recolectores en curso con el supervisor de área."
+  },
+  {
+    "id": "RAD-2026-009",
+    "solicitante": "Hernando Gutiérrez Varela",
+    "categoria": "Alumbrado Público",
+    "descripcion": "Luminaria intermitente (parpadeo constante) genera molestia visual en vivienda de la Cra 22 #10-40.",
+    "estado": "Resuelto",
+    "fechaRadicacion": "2026-08-14",
+    "plazoLegal": "5 días hábiles",
+    "respuestaOficial": "Cambio de driver LED efectuado por la cuadrilla de mantenimiento de zona norte."
+  },
+  {
+    "id": "RAD-2026-010",
+    "solicitante": "Esperanza Ríos Salamanca",
+    "categoria": "Agua y Alcantarillado",
+    "descripcion": "Solicitud de revisión de medidor por incremento atípico en la tarifa facturada del último periodo.",
+    "estado": "En trámite",
+    "fechaRadicacion": "2026-08-19",
+    "plazoLegal": "10 días hábiles",
+    "respuestaOficial": "Orden de inspección de laboratorio emitida. Técnico tomará lectura de contraste en predio."
+  }
+]
