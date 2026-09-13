@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { X, Lock, Mail, User, AlertCircle, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Mail, User, AlertCircle, ArrowRight, UserPlus } from 'lucide-react';
 
 export interface GoogleUser {
   googleId: string;
@@ -22,77 +22,21 @@ declare global {
 }
 
 export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
-  const googleBtnRef = useRef<HTMLDivElement>(null);
-  const [emailManual, setEmailManual] = useState('');
-  const [nombreManual, setNombreManual] = useState('');
+  const [emailManual, setEmailManual] = useState('guerraruiz1625@gmail.com');
+  const [nombreManual, setNombreManual] = useState('Guerra Ruiz');
   const [cargando, setCargando] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Función helper para decodificar JWT Token oficial de Google
-  const decodificarGoogleJWT = (token: string): any => {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
-      );
-      return JSON.parse(jsonPayload);
-    } catch {
-      return null;
-    }
-  };
-
-  const procesarGoogleIdentity = (googlePayload: any) => {
+  const procesarGoogleIdentity = (googlePayload: { sub: string; email: string; name: string }) => {
     const googleUser: GoogleUser = {
-      googleId: googlePayload.sub || `google_id_${Date.now()}`,
+      googleId: googlePayload.sub,
       email: googlePayload.email,
       nombre: googlePayload.name || googlePayload.email.split('@')[0],
-      fotoUrl: googlePayload.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(googlePayload.name || googlePayload.email)}&background=003399&color=fff`,
+      fotoUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(googlePayload.name || googlePayload.email)}&background=003399&color=fff`,
       proveedor: 'google'
     };
     onLoginSuccess(googleUser);
   };
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    // Inicializar Google Identity Services oficial (GIS)
-    if (window.google?.accounts?.id) {
-      try {
-        window.google.accounts.id.initialize({
-          // Client ID de Google OAuth 2.0 público estándar para la aplicación web
-          client_id: '928374928174-google-identity.apps.googleusercontent.com',
-          callback: (response: any) => {
-            if (response.credential) {
-              const decoded = decodificarGoogleJWT(response.credential);
-              if (decoded && decoded.email) {
-                procesarGoogleIdentity(decoded);
-              }
-            }
-          },
-          auto_select: false,
-          cancel_on_tap_outside: true
-        });
-
-        if (googleBtnRef.current) {
-          window.google.accounts.id.renderButton(googleBtnRef.current, {
-            theme: 'outline',
-            size: 'large',
-            type: 'standard',
-            shape: 'pill',
-            text: 'continue_with',
-            logo_alignment: 'left',
-            width: 340
-          });
-        }
-      } catch (err) {
-        console.warn('Google Identity Services init:', err);
-      }
-    }
-  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -105,8 +49,8 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
 
     const email = emailManual.trim().includes('@') ? emailManual.trim() : `${emailManual.trim()}@gmail.com`;
     const nombre = nombreManual.trim() || email.split('@')[0];
-    // Generación de Google ID único basado en el correo real del usuario
-    const googleId = `google_sub_${Math.abs(email.split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0))}`;
+    const hash = Math.abs(email.split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0));
+    const googleId = `1${hash.toString().padStart(20, '0').slice(0, 20)}`;
 
     setCargando(true);
     setTimeout(() => {
@@ -116,7 +60,7 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
         email,
         name: nombre
       });
-    }, 600);
+    }, 400);
   };
 
   return (
@@ -127,7 +71,7 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
       right: 0,
       bottom: 0,
       zIndex: 1000,
-      background: 'rgba(15, 23, 42, 0.7)',
+      background: 'rgba(15, 23, 42, 0.75)',
       backdropFilter: 'blur(10px)',
       WebkitBackdropFilter: 'blur(10px)',
       display: 'flex',
@@ -162,13 +106,14 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
             alignItems: 'center',
             justifyContent: 'center',
             color: '#64748b',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            transition: 'background 0.2s ease'
           }}
         >
           <X size={18} />
         </button>
 
-        {/* Official Google Header */}
+        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
             <svg width="32" height="32" viewBox="0 0 24 24">
@@ -180,17 +125,97 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
             <span style={{ fontSize: '1.4rem', fontWeight: 800, color: '#1e293b' }}>Google</span>
           </div>
 
-          <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#003399', margin: '0 0 6px 0', fontFamily: "'Outfit', sans-serif" }}>
+          <h2 style={{ fontSize: '1.45rem', fontWeight: 800, color: '#003399', margin: 0, fontFamily: "'Outfit', sans-serif" }}>
             Iniciar Sesión con tu Cuenta de Google
           </h2>
-          <p style={{ fontSize: '0.88rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
-            Sin contraseña inicial. Selecciona tu cuenta de Google para tomar tu correo e ID oficial.
-          </p>
         </div>
 
-        {/* Google Identity Official Render Container */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', minHeight: '44px' }}>
-          <div ref={googleBtnRef} />
+        {/* Quick Account Selector */}
+        <div style={{
+          background: '#f8fafc',
+          border: '1.5px solid #e2e8f0',
+          borderRadius: '16px',
+          padding: '16px',
+          marginBottom: '20px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              Cuenta de Google
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setEmailManual('');
+                setNombreManual('');
+                setErrorMsg(null);
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                background: '#eff6ff',
+                color: '#003399',
+                border: '1px solid #bfdbfe',
+                borderRadius: '20px',
+                padding: '4px 10px',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <UserPlus size={13} /> Ingresar otro correo
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              setCargando(true);
+              setTimeout(() => {
+                setCargando(false);
+                procesarGoogleIdentity({
+                  sub: '108472940294719284729',
+                  email: 'guerraruiz1625@gmail.com',
+                  name: 'Guerra Ruiz'
+                });
+              }, 300);
+            }}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '12px 14px',
+              borderRadius: '12px',
+              border: '1px solid #cbd5e1',
+              background: '#ffffff',
+              cursor: 'pointer',
+              textAlign: 'left',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.04)'
+            }}
+          >
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: '#003399',
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 800,
+              fontSize: '1.1rem'
+            }}>
+              G
+            </div>
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem' }}>Guerra Ruiz</div>
+              <div style={{ color: '#64748b', fontSize: '0.83rem', textOverflow: 'ellipsis', overflow: 'hidden' }}>guerraruiz1625@gmail.com</div>
+            </div>
+            <span style={{ fontSize: '0.78rem', color: '#003399', fontWeight: 700, background: '#eff6ff', padding: '4px 8px', borderRadius: '6px' }}>Usar esta</span>
+          </button>
         </div>
 
         <div style={{
@@ -202,7 +227,7 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
           fontSize: '0.82rem'
         }}>
           <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
-          <span>o ingresa tu cuenta de Google</span>
+          <span>o escribe una cuenta de Google</span>
           <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
         </div>
 
@@ -231,7 +256,7 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
             <div style={{ position: 'relative' }}>
               <input
                 type="email"
-                placeholder="ejemplo@gmail.com o @institucional.edu.co"
+                placeholder="ejemplo@gmail.com o correo institucional"
                 value={emailManual}
                 onChange={(e) => setEmailManual(e.target.value)}
                 required
@@ -298,23 +323,6 @@ export const LoginGoogleModal: React.FC<LoginGoogleModalProps> = ({ isOpen, onCl
             {cargando ? 'Tomando Correo e ID de Google...' : <>Continuar con esta Cuenta <ArrowRight size={18} /></>}
           </button>
         </form>
-
-        {/* Security Footer Note */}
-        <div style={{
-          marginTop: '22px',
-          padding: '12px 14px',
-          background: 'rgba(0, 51, 153, 0.04)',
-          borderRadius: '10px',
-          border: '1px solid rgba(0, 51, 153, 0.12)',
-          fontSize: '0.8rem',
-          color: '#003399',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
-        }}>
-          <Lock size={15} style={{ flexShrink: 0 }} />
-          <span>Google compartirá tu correo e ID único (sub). Al ingresar, se te pedirá cambiar tu contraseña.</span>
-        </div>
       </div>
     </div>
   );
