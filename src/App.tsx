@@ -2,13 +2,22 @@ import { useState, useEffect } from 'react';
 import { TarjetaTramite } from './components/TarjetaTramite';
 import { ConsultasPage } from './pages/ConsultasPage';
 import { DetalleConsultaPage } from './pages/DetalleConsultaPage';
-import { Droplets, Trash2, Lightbulb, Building2, Search, PhoneCall, HelpCircle, CheckCircle, FileSearch, Home } from 'lucide-react';
+import { LoginGoogleModal, type GoogleUser } from './components/LoginGoogleModal';
+import { CambiarPasswordModal } from './components/CambiarPasswordModal';
+import { Droplets, Trash2, Lightbulb, Building2, Search, PhoneCall, HelpCircle, CheckCircle, FileSearch, Home, UserCheck, KeyRound, LogOut } from 'lucide-react';
 
 export function App() {
   const [paginaActual, setPaginaActual] = useState<'inicio' | 'consultas'>('inicio');
   const [radicadoSeleccionadoId, setRadicadoSeleccionadoId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTramite, setSelectedTramite] = useState<string | null>(null);
+
+  // Estados de Autenticación Google & Cambio de Contraseña
+  const [usuarioLogueado, setUsuarioLogueado] = useState<GoogleUser | null>(null);
+  const [passwordEstablecida, setPasswordEstablecida] = useState<string | null>(null);
+  const [modalLoginOpen, setModalLoginOpen] = useState(false);
+  const [modalPasswordOpen, setModalPasswordOpen] = useState(false);
+  const [notificacionExito, setNotificacionExito] = useState<string | null>(null);
 
   // Parsear URL inicial para rutas del tipo /consultas/1 o /consultas/RAD-2026-001
   useEffect(() => {
@@ -64,6 +73,31 @@ export function App() {
     window.history.pushState({}, '', '/');
   };
 
+  // Callback de Ingreso Exitoso con Google sin Contraseña
+  const handleLoginGoogleExito = (user: GoogleUser) => {
+    setUsuarioLogueado(user);
+    setModalLoginOpen(false);
+    // Abrir inmediatamente la pantalla para establecer/cambiar la contraseña
+    setModalPasswordOpen(true);
+  };
+
+  // Callback de Guardado de Nueva Contraseña
+  const handlePasswordGuardadaExito = (nuevaPass: string) => {
+    setPasswordEstablecida(nuevaPass);
+    setModalPasswordOpen(false);
+    setNotificacionExito(`¡Contraseña establecida correctamente para ${usuarioLogueado?.nombre}! Ahora tu cuenta cuenta con doble factor de acceso.`);
+
+    setTimeout(() => {
+      setNotificacionExito(null);
+    }, 6000);
+  };
+
+  const handleCerrarSesion = () => {
+    setUsuarioLogueado(null);
+    setPasswordEstablecida(null);
+    setNotificacionExito(null);
+  };
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#f8fafc' }}>
       {/* Top Institutional Header */}
@@ -95,8 +129,8 @@ export function App() {
             </div>
           </div>
 
-          {/* Navigation Bar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Navigation Bar & Auth Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
             <button
               onClick={() => { setRadicadoSeleccionadoId(null); setPaginaActual('inicio'); window.history.pushState({}, '', '/'); }}
               style={{
@@ -137,12 +171,117 @@ export function App() {
               <FileSearch size={16} /> Consultar Radicados (PQRS)
             </button>
 
-            <span style={{ fontSize: '0.85rem', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '8px' }}>
+            {/* Login & User Profile Controls */}
+            {usuarioLogueado ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.18)', padding: '4px 10px 4px 6px', borderRadius: '30px' }}>
+                <img
+                  src={usuarioLogueado.fotoUrl}
+                  alt={usuarioLogueado.nombre}
+                  style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #ffffff' }}
+                />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#ffffff' }}>
+                  {usuarioLogueado.nombre.split(' ')[0]}
+                </span>
+
+                <button
+                  onClick={() => setModalPasswordOpen(true)}
+                  title={passwordEstablecida ? "Contraseña asignada (Clic para cambiar)" : "Establecer Contraseña"}
+                  style={{
+                    background: 'rgba(255,255,255,0.2)',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '6px 10px',
+                    color: '#ffffff',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <KeyRound size={13} /> Pass
+                </button>
+
+                <button
+                  onClick={handleCerrarSesion}
+                  title="Cerrar Sesión"
+                  style={{
+                    background: 'rgba(239, 68, 68, 0.3)',
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '6px 8px',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <LogOut size={14} />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setModalLoginOpen(true)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  border: 'none',
+                  background: '#ffffff',
+                  color: '#003399',
+                  fontWeight: 800,
+                  fontSize: '0.88rem',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                <UserCheck size={16} /> Ingresar con Google
+              </button>
+            )}
+
+            <span style={{ fontSize: '0.85rem', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '4px' }}>
               <PhoneCall size={15} /> Línea 070
             </span>
           </div>
         </div>
       </header>
+
+      {/* Banner de Notificación de Éxito al Establecer Contraseña */}
+      {notificacionExito && (
+        <div style={{
+          background: '#dcfce7',
+          borderBottom: '1px solid #86efac',
+          color: '#14532d',
+          padding: '12px 24px',
+          textAlign: 'center',
+          fontWeight: 600,
+          fontSize: '0.92rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px'
+        }}>
+          <CheckCircle size={18} color="#16a34a" /> {notificacionExito}
+        </div>
+      )}
+
+      {/* Modal 1: Login con Google sin Contraseña */}
+      <LoginGoogleModal
+        isOpen={modalLoginOpen}
+        onClose={() => setModalLoginOpen(false)}
+        onLoginSuccess={handleLoginGoogleExito}
+      />
+
+      {/* Modal 2: Cambiar/Establecer Contraseña (se abre tras login con Google) */}
+      <CambiarPasswordModal
+        isOpen={modalPasswordOpen}
+        usuario={usuarioLogueado}
+        onPasswordGuardada={handlePasswordGuardadaExito}
+      />
 
       {/* Conditional Rendering Based on Active Page / Radicado Selection */}
       {radicadoSeleccionadoId ? (
