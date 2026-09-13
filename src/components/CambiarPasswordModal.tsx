@@ -112,6 +112,9 @@ export const CambiarPasswordModal: React.FC<CambiarPasswordModalProps> = ({ isOp
             <p style={{ fontSize: '0.82rem', color: '#64748b', margin: 0 }}>
               {usuario.email}
             </p>
+            <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: '2px 0 0 0', fontFamily: 'monospace' }}>
+              Google ID: {usuario.googleId}
+            </p>
           </div>
         </div>
 
